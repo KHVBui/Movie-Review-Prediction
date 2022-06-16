@@ -1,6 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -11,6 +9,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import GridSearchCV
 
 """
 Preparing the Data
@@ -109,3 +108,18 @@ conf_mat = confusion_matrix(test_y,
                             labels = ['positive', 'negative'])
 # [[290  45]
 # [ 60 265]]
+
+'''
+Tuning the Model using GridSearchCV
+'''
+# Set the parameters
+parameters = {'C': [1, 4, 8, 16, 32], 'kernel': ['linear', 'rbf']}
+svc = SVC()
+svc_grid = GridSearchCV(svc, parameters, cv = 5)
+
+svc_grid.fit(train_x_vector, train_y)
+# print(svc_grid.best_params_)
+# print(svc_grid.best_estimator_)
+# {'C': 1, 'kernel': 'linear'}
+# SVC(C=1, kernel='linear')
+# C = 1 is the default, so our SVM model was optimal already
